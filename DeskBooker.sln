@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskBooker.Core.Tests", "DeskBooker.Core.Tests\DeskBooker.Core.Tests.csproj", "{0DAE4422-2556-46A2-AC73-616B5A94F05C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskBooker.Core", "DeskBooker.Core\DeskBooker.Core.csproj", "{4A78E5FA-C143-4A66-A8B5-DD081ECAA7D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{0DAE4422-2556-46A2-AC73-616B5A94F05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DAE4422-2556-46A2-AC73-616B5A94F05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DAE4422-2556-46A2-AC73-616B5A94F05C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A78E5FA-C143-4A66-A8B5-DD081ECAA7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A78E5FA-C143-4A66-A8B5-DD081ECAA7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A78E5FA-C143-4A66-A8B5-DD081ECAA7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A78E5FA-C143-4A66-A8B5-DD081ECAA7D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
