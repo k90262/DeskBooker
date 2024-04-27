@@ -19,14 +19,14 @@ public class DeskBookingRequestProcessor
             throw new ArgumentNullException(nameof(request));
         }
 
-        _deskBookingRepository.Save(new DeskBooking()
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Date = request.Date
-        });
-        return new DeskBookingResult
+        _deskBookingRepository.Save(Create<DeskBooking>(request));
+        
+        return Create<DeskBookingResult>(request);
+    }
+
+    private static T Create<T>(DeskBookingRequest request) where T : DeskBookingBase, new()
+    {
+        return new T()
         {
             FirstName = request.FirstName,
             LastName = request.LastName,
