@@ -1,9 +1,14 @@
+using DeskBooker.Core.DataInterface;
 using DeskBooker.Core.Domain;
 
 namespace DeskBooker.Core.Processor;
 
 public class DeskBookingRequestProcessor
 {
+    public DeskBookingRequestProcessor(IDeskBookingRepository deskBookingRepository)
+    {
+    }
+
     public DeskBookingResult BookDesk(DeskBookingRequest request)
     {
         if (request == null)

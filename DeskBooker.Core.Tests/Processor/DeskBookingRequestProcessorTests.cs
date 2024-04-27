@@ -1,3 +1,4 @@
+using DeskBooker.Core.DataInterface;
 using DeskBooker.Core.Domain;
 using Moq;
 
@@ -6,10 +7,12 @@ namespace DeskBooker.Core.Processor;
 public class DeskBookingRequestProcessorTests
 {
     private readonly DeskBookingRequestProcessor _processor;
+    private readonly Mock<IDeskBookingRepository> _deskBookingRepositoryMock;
 
     public DeskBookingRequestProcessorTests()
     {
-        _processor = new DeskBookingRequestProcessor();
+        _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
+        _processor = new DeskBookingRequestProcessor(_deskBookingRepositoryMock.Object);
     }
 
     [Fact]
@@ -48,8 +51,8 @@ public class DeskBookingRequestProcessorTests
     {
         // Arrange
         DeskBooking savedDeskBooking = null;
-        Mock<IDeskBookingRepository> deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
-        deskBookingRepositoryMock.Setup(x => x.Save(It.IsAny<DeskBooking>()))
+        
+        _deskBookingRepositoryMock.Setup(x => x.Save(It.IsAny<DeskBooking>()))
             .Callback<DeskBooking>(deskBooking =>
             {
                 savedDeskBooking = deskBooking;
@@ -66,24 +69,11 @@ public class DeskBookingRequestProcessorTests
         DeskBookingResult result = _processor.BookDesk(request);
         
         // Assert
-        deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
+        _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
         Assert.NotNull(savedDeskBooking);
         Assert.Equal(request.FirstName, savedDeskBooking.FirstName);
         Assert.Equal(request.LastName, savedDeskBooking.LastName);
         Assert.Equal(request.Date, savedDeskBooking.Date);
         Assert.Equal(request.Email, savedDeskBooking.Email);
     }
-}
-
-public interface IDeskBookingRepository
-{
-    void Save(DeskBooking deskBooking);
-}
-
-public class DeskBooking
-{
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public DateTime Date { get; set; }
 }
