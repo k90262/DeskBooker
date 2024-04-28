@@ -7,7 +7,7 @@ public class DeskBookingRequestProcessor
 {
     private readonly IDeskBookingRepository _deskBookingRepository;
 
-    public DeskBookingRequestProcessor(IDeskBookingRepository deskBookingRepository)
+    public DeskBookingRequestProcessor(IDeskBookingRepository deskBookingRepository, IDeskRepository deskRepository)
     {
         _deskBookingRepository = deskBookingRepository;
     }
