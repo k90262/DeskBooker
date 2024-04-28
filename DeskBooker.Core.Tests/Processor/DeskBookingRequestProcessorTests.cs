@@ -8,8 +8,8 @@ public class DeskBookingRequestProcessorTests
 {
     private readonly DeskBookingRequestProcessor _processor;
     private readonly Mock<IDeskBookingRepository> _deskBookingRepositoryMock;
-    private readonly DeskBookingRequest _request;
     private readonly Mock<IDeskRepository> _deskRepositoryMock;
+    private readonly DeskBookingRequest _request;
     private readonly List<Desk> _availableDesks;
 
     public DeskBookingRequestProcessorTests()

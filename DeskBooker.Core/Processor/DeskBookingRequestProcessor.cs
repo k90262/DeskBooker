@@ -6,10 +6,12 @@ namespace DeskBooker.Core.Processor;
 public class DeskBookingRequestProcessor
 {
     private readonly IDeskBookingRepository _deskBookingRepository;
+    private readonly IDeskRepository _deskRepository;
 
     public DeskBookingRequestProcessor(IDeskBookingRepository deskBookingRepository, IDeskRepository deskRepository)
     {
         _deskBookingRepository = deskBookingRepository;
+        _deskRepository = deskRepository;
     }
 
     public DeskBookingResult BookDesk(DeskBookingRequest request)
@@ -19,7 +21,11 @@ public class DeskBookingRequestProcessor
             throw new ArgumentNullException(nameof(request));
         }
 
-        _deskBookingRepository.Save(Create<DeskBooking>(request));
+        var availableDesk = _deskRepository.GetAvailableDesks(request.Date);
+        if (availableDesk.Count() > 0)
+        {
+            _deskBookingRepository.Save(Create<DeskBooking>(request));
+        }
         
         return Create<DeskBookingResult>(request);
     }
