@@ -22,7 +22,7 @@ public class DeskBookingRequestProcessorTests
             Date = new DateTime(2024, 04, 20)
         };
 
-        _availableDesks = new List<Desk> { new Desk() };
+        _availableDesks = new List<Desk> { new Desk { Id = 7} };
         _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
         _deskRepositoryMock = new Mock<IDeskRepository>();
         _deskRepositoryMock.Setup(x => x.GetAvailableDesks(_request.Date))
@@ -77,6 +77,7 @@ public class DeskBookingRequestProcessorTests
         Assert.Equal(_request.LastName, savedDeskBooking.LastName);
         Assert.Equal(_request.Date, savedDeskBooking.Date);
         Assert.Equal(_request.Email, savedDeskBooking.Email);
+        Assert.Equal(_availableDesks.First().Id, savedDeskBooking.DeskId);
     }
 
     [Fact]
