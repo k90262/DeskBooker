@@ -21,10 +21,14 @@ public class DeskBookingRequestProcessor
             throw new ArgumentNullException(nameof(request));
         }
 
-        var availableDesk = _deskRepository.GetAvailableDesks(request.Date);
-        if (availableDesk.Count() > 0)
+        var availableDesks = _deskRepository.GetAvailableDesks(request.Date);
+        if (availableDesks.Count() > 0)
         {
-            _deskBookingRepository.Save(Create<DeskBooking>(request));
+            var availableDesk = availableDesks.First();
+            var deskBooking = Create<DeskBooking>(request);
+            deskBooking.DeskId = availableDesk.Id;
+                
+            _deskBookingRepository.Save(deskBooking);
         }
         
         return Create<DeskBookingResult>(request);
