@@ -93,4 +93,23 @@ public class DeskBookingRequestProcessorTests
         _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Never);
 
     }
+
+    [Theory]
+    [InlineData(DeskBookingResultCode.Success, true)]
+    [InlineData(DeskBookingResultCode.NoDeskAvailable, false)]
+    public void ShouldReturnExpectedResultCode(
+        DeskBookingResultCode expectedResultCode, bool isDeskAvailable)
+    {
+        // Arrange
+        if (!isDeskAvailable)
+        {
+            _availableDesks.Clear();
+        }
+        
+        // Act
+        DeskBookingResult result = _processor.BookDesk(_request);
+        
+        // Assert
+        Assert.Equal(expectedResultCode, result.Code);
+    }
 }
