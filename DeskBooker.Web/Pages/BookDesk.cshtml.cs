@@ -7,11 +7,11 @@ namespace DeskBooker.Web.Pages
 {
   public class BookDeskModel : PageModel
   {
-    private readonly IDeskBookingRequestProcessor _processorMockObject;
+    private readonly IDeskBookingRequestProcessor _deskBookingRequestProcessor;
 
-    public BookDeskModel(IDeskBookingRequestProcessor processorMockObject)
+    public BookDeskModel(IDeskBookingRequestProcessor deskBookingRequestProcessor)
     {
-      _processorMockObject = processorMockObject;
+      _deskBookingRequestProcessor = deskBookingRequestProcessor;
     }
 
     [BindProperty]
@@ -19,7 +19,7 @@ namespace DeskBooker.Web.Pages
 
     public void OnPost()
     {
-      
+      _deskBookingRequestProcessor.BookDesk(DeskBookingRequest);
     }
   }
 }
