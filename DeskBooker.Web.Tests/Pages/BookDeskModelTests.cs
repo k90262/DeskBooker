@@ -7,7 +7,29 @@ namespace DeskBooker.Web.Pages
 {
   public class BookDeskModelTests
   {
+    private readonly Mock<IDeskBookingRequestProcessor> _processorMock;
+    private readonly BookDeskModel _bookDeskModel;
+    private readonly DeskBookingResult _deskBookingResult;
 
+    public BookDeskModelTests()
+    {
+      // Arrange
+      _processorMock = new Mock<IDeskBookingRequestProcessor>();
+      
+      _bookDeskModel = new BookDeskModel(_processorMock.Object)
+      {
+        DeskBookingRequest = new DeskBookingRequest()
+      };
+      
+      _deskBookingResult = new DeskBookingResult
+      {
+        Code = DeskBookingResultCode.Success
+      };
+      
+      _processorMock.Setup(x => x.BookDesk(_bookDeskModel.DeskBookingRequest))
+        .Returns(_deskBookingResult);
+    }
+    
     [Theory]
     [InlineData(0, false)]
     [InlineData(1, true)]
@@ -15,26 +37,16 @@ namespace DeskBooker.Web.Pages
       int expectedBookDeskCalls, bool isModelValid)
     {
       // Arrange
-      var processorMock = new Mock<IDeskBookingRequestProcessor>();
-      var bookDeskModel = new BookDeskModel(processorMock.Object)
-      {
-        DeskBookingRequest = new DeskBookingRequest()
-      };
-      processorMock.Setup(x => x.BookDesk(bookDeskModel.DeskBookingRequest))
-        .Returns(new DeskBookingResult
-        {
-          Code = DeskBookingResultCode.Success
-        });
       if (!isModelValid)
       {
-        bookDeskModel.ModelState.AddModelError("JustAKey", "AnErrorMessage");
+        _bookDeskModel.ModelState.AddModelError("JustAKey", "AnErrorMessage");
       }
 
       // Act
-      bookDeskModel.OnPost();
+      _bookDeskModel.OnPost();
       
       // Assert
-      processorMock.Verify(x => x.BookDesk(bookDeskModel.DeskBookingRequest),
+      _processorMock.Verify(x => x.BookDesk(_bookDeskModel.DeskBookingRequest),
         Times.Exactly(expectedBookDeskCalls));
     }
 
@@ -42,22 +54,13 @@ namespace DeskBooker.Web.Pages
     public void ShouldAddModelErrorIfNoDeskIsAvailable()
     {
       // Arrange
-      var processorMock = new Mock<IDeskBookingRequestProcessor>();
-      var bookDeskModel = new BookDeskModel(processorMock.Object)
-      {
-        DeskBookingRequest = new DeskBookingRequest()
-      };
-      processorMock.Setup(x => x.BookDesk(bookDeskModel.DeskBookingRequest))
-        .Returns(new DeskBookingResult
-        {
-          Code = DeskBookingResultCode.NoDeskAvailable
-        });
+      _deskBookingResult.Code = DeskBookingResultCode.NoDeskAvailable;
       
       // Act
-      bookDeskModel.OnPost();
+      _bookDeskModel.OnPost();
       
       // Assert
-      var modelStateEntry = Assert.Contains("DeskBookingRequest.Date", bookDeskModel.ModelState);
+      var modelStateEntry = Assert.Contains("DeskBookingRequest.Date", _bookDeskModel.ModelState);
       var modelError = Assert.Single(modelStateEntry.Errors);
       Assert.Equal("No desk available for selected date", modelError.ErrorMessage);
     }
@@ -66,22 +69,13 @@ namespace DeskBooker.Web.Pages
     public void ShouldNotAddModelErrorIfDeskIsAvailable()
     {
       // Arrange
-      var processorMock = new Mock<IDeskBookingRequestProcessor>();
-      var bookDeskModel = new BookDeskModel(processorMock.Object)
-      {
-        DeskBookingRequest = new DeskBookingRequest()
-      };
-      processorMock.Setup(x => x.BookDesk(bookDeskModel.DeskBookingRequest))
-        .Returns(new DeskBookingResult
-        {
-          Code = DeskBookingResultCode.Success
-        });
+      _deskBookingResult.Code = DeskBookingResultCode.Success;
       
       // Act
-      bookDeskModel.OnPost();
+      _bookDeskModel.OnPost();
       
       // Assert
-      Assert.DoesNotContain("DeskBookingRequest.Date", bookDeskModel.ModelState);
+      Assert.DoesNotContain("DeskBookingRequest.Date", _bookDeskModel.ModelState);
     }
   }
 }
